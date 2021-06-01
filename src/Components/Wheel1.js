@@ -11,14 +11,15 @@ const Wheel = () => {
     }
   }
 
-  const [selectedOption, dispatch] = useReducer(setSelectedOption, 0.5)
+  const [selectedOption, dispatch] = useReducer(setSelectedOption, degree)
 
   const spinWheel = () => {
-    const deg = Math.floor(Math.random() * (7000-1024)) + 1024;
+    const newDeg = Math.floor(Math.random() * (7000-1024)) + 1024;
     console.log(`Option ${selectedOption}`);
-    document.getElementById('box').style.transform = `rotate(${deg}deg)`;
-    setDegree(deg);
-    dispatch({type: 'SPIN_WHEEL', degree: deg})
+    document.getElementById('box').style.transform = `rotate(${newDeg}deg)`;
+    console.log(newDeg)
+    setDegree((newDeg % 360) + degree)
+    dispatch({type: 'SPIN_WHEEL', degree: newDeg})
   }
 
  
