@@ -7,15 +7,29 @@ const Wheel = () => {
       case 'SPIN_WHEEL':
         return {...wheelState, degree: action.degree};
       case 'SELECT_OPTION':
-        return {...wheelState, selectedOption: action.selectedOption}
+        return {...wheelState, selectedOption: action.selectedOption};
+      case 'TOGGLE_DISPLAY':
+        return {...wheelState, showResult: !wheelState.showResult}
+      default:
+        throw new Error('Invalid action type')
     }
   }
-  const [wheelState, dispatch] = useReducer(setWheelState, {degree: 0, selectedOption: 1})
+  const [wheelState, dispatch] = useReducer(setWheelState, 
+    {degree: 0, 
+    selectedOption: 1,
+    showResult: false
+  })
 
   const spinWheel = () => {
+    if(wheelState.showResult){
+      dispatch({type: 'TOGGLE_DISPLAY'})
+    }
     const newDeg = Math.floor(Math.random() * (7000-1024)) + 1024;
     console.log(newDeg)
     document.getElementById('box').style.transform = `rotate(${newDeg}deg)`
+    setTimeout(()=>{
+      dispatch({type: 'TOGGLE_DISPLAY'})
+    }, 5700)
     const degModulo = newDeg % 360;
     console.log(degModulo)
     dispatch({type: 'SPIN_WHEEL', degree: degModulo})
@@ -66,7 +80,8 @@ const Wheel = () => {
         </div>
       </div>
       <button className="spin" onClick={spinWheel}>Spin</button>
-      <p>Option {wheelState.selectedOption}</p>
+      {wheelState.showResult ? <p>Option {wheelState.selectedOption}</p> 
+      : null}
     </div>
   )
 }
