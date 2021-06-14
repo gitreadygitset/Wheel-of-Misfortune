@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react'
+import '../styles/Wheel.css'
 
 const Wheel = () => {
   
@@ -25,13 +26,11 @@ const Wheel = () => {
       dispatch({type: 'TOGGLE_DISPLAY'})
     }
     const newDeg = Math.floor(Math.random() * (7000-1024)) + 1024;
-    console.log(newDeg)
     document.getElementById('box').style.transform = `rotate(${newDeg}deg)`
     setTimeout(()=>{
       dispatch({type: 'TOGGLE_DISPLAY'})
     }, 5700)
     const degModulo = newDeg % 360;
-    console.log(degModulo)
     dispatch({type: 'SPIN_WHEEL', degree: degModulo})
     setSelectedOption(degModulo)
   }
@@ -79,9 +78,11 @@ const Wheel = () => {
           </div>
         </div>
       </div>
-      <button className="spin" onClick={spinWheel}>Spin</button>
-      {wheelState.showResult ? <p>Option {wheelState.selectedOption}</p> 
-      : null}
+      <div id="spin">
+        <button className="spin" onClick={spinWheel}>Spin</button>
+        {wheelState.showResult ? <p>Option {wheelState.selectedOption}</p> 
+        : null}
+      </div>
     </div>
   )
 }

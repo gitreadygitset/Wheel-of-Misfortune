@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {fetchTrivia} from '../api/fetchTrivia'
+import '../styles/Trivia.css'
 
 const TriviaDisplay = () => {
   const [currentQuestion, setCurrentQuestion] = useState({})
@@ -17,8 +18,10 @@ const TriviaDisplay = () => {
   }
 
   return (
-    <div>
-      <p>{currentQuestion.text}</p>
+    <div id="trivia-display">
+      <div>
+        <p>{currentQuestion.text}</p>
+      </div>
       {currentQuestion.text ?
       <div>
         <label htmlFor="answer">Answer</label> 

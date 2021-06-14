@@ -1,0 +1,14 @@
+#trivia-display {
+  width: 100%;
+  padding: 2rem 2rem;
+  border: 1px solid red;
+}
+
+#trivia-display div {
+  margin: 1rem auto;
+}
+@media only screen and (min-width: 450px) {
+  #trivia-display {
+    padding: 4rem 2rem;
+  }
+}

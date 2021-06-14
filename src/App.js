@@ -5,11 +5,13 @@ import TriviaDisplay from './Components/TriviaDisplay'
 
 function App() {
 
-
   return (
-    <div className="App">
-      <Wheel/>
-      <TriviaDisplay/>
+    <div>
+      <h1>Wheel of Misfortune</h1>
+      <div className="App">
+        <TriviaDisplay/>
+        <Wheel/>
+      </div>
     </div>
   );
 }
