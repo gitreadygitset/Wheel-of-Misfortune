@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react'
 import {fetchTrivia} from '../api/fetchTrivia'
 import '../styles/Trivia.css'
 
-const TriviaDisplay = () => {
-  const [currentQuestion, setCurrentQuestion] = useState({})
-  const [showAnswer, setShowAnswer] = useState(false)
-  const [difference, setDifference] = useState (null)
-  const [userGuess, setUserGuess] = useState (null)
-
+const TriviaDisplay = ({state, dispatch}) => {
+  
   const questionify = text => {
     let spaceIndex = text.indexOf(' ');
     let questionString = "What" + text.slice(spaceIndex, -1) + "?";
@@ -16,36 +12,37 @@ const TriviaDisplay = () => {
 
   const getQuestion = async () => {
     let questionData = await fetchTrivia();
+    document.getElementById('submit').disabled = false;
     questionData.text = questionify(questionData.text);
-    setCurrentQuestion(questionData)
+    dispatch({type: 'SET_QUESTION', currentQuestion: questionData})
+    dispatch({type: 'TOGGLE_ANSWER_DISPLAY'})
+    dispatch({type: 'USER_GUESSES', userGuess: null});
   }
 
   const submitAnswer = (event) => {
     event.preventDefault();
     document.getElementById('submit').disabled = true;
-    setShowAnswer(true);
     let userAnswer = document.getElementById('answer').value
     document.getElementById('answer').value = null;
-    setDifference(Math.abs(userAnswer - currentQuestion.number));
-    setUserGuess(userAnswer)
-    setShowAnswer(true);
+    dispatch({type: 'CALCULATE_DIFFERENCE', difference: (Math.abs(userAnswer - state.currentQuestion.number))});
+    dispatch({type: 'USER_GUESSES', userGuess: userAnswer})
+    dispatch({type: 'TOGGLE_ANSWER_DISPLAY'})
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     fetchTrivia()
-    .then(questionData=> {
+    .then(questionData => {
       questionData.text = questionify(questionData.text);
-      setCurrentQuestion(questionData)
+      dispatch({type: 'SET_QUESTION', currentQuestion: questionData})
     })
-    }
-    ,[]
+  }, []
   )
   return (
     <div id="trivia-display">
       <div>
-        <p>{currentQuestion.text}</p>
+        <p>{state.currentQuestion.text}</p>
       </div>
-      {currentQuestion.text ?
+      {state.currentQuestion.text ?
       <div>
         <form onSubmit={submitAnswer}>
           <label htmlFor="answer">Enter your answer</label> 
@@ -55,8 +52,8 @@ const TriviaDisplay = () => {
       </div>
       : null }
       <div>
-        {showAnswer ? 
-        <p>You entered {userGuess}. The correct answer is {currentQuestion.number}. That's a difference of {difference}.</p> 
+        {state.showAnswer ? 
+        <p>You entered {state.userGuess}. The correct answer is {state.currentQuestion.number}. That's a difference of {state.difference}. {state.selectedOption}</p> 
         : null }
       </div>
       <button onClick={getQuestion}>Next question</button>
